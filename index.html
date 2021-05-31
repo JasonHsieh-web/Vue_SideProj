@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="台南景點一覽Vue.js">
+
+  <title>台南景點一覽</title>
+  <script src="https://kit.fontawesome.com/9d6b4ccc1d.js" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <style>
+    .w-35 {
+      width: 35% !important;
+    }
+
+    /* body {
+background-image: url('img/TaiwanView.jpg');
+background-repeat: repeat-x;
+} */
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <h1 class="text-center p-3">台南景點一覽</h1>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-6">
+          <select class="form-select w-100 m-auto my-3" aria-label="Default select example" v-model="filter">
+            <option value="">--請選擇地區--</option>
+            <option :value=item v-for="item in Place">{{item}}</option>
+
+
+          </select>
+
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row justify-content-center">
+        <card v-for="(item, index) in filterData[currentPage]" :area="item" :key="index"></card>
+
+        <nav aria-label="..." >
+          <ul class="pagination">
+
+            <li class="page-item" v-for="(page,index) in totalPage" :key="index"
+              :class="{active:currentPage === page - 1}">
+              <a class="page-link" @click.prevent="currentPage = page -1" href="#">{{page}}</a>
+            </li>
+
+
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script src="data.js"></script>
+  <script src="jquery/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script type="text/x-template" id="area">
+        <div class="card mx-3 my-3 border shadow col-6  " style="width: 18rem;">
+             <div class="card-body">
+                 <h3 class="card-title text-primary">{{area.district}}</h3>
+               <h5 class="card-title">{{area.name}}</h5>
+             </div>
+             <ul class="list-group list-group-flush">
+              <li class="list-group-item"><img src="img/clock.png" alt=""> {{area.open_time}}</li>
+              <li class="list-group-item"><a :href="`http://maps.apple.com/maps?q=${area.address}`" class='link-info'><img src="img/maps-and-flags.png" alt="">{{area.address}}</a></li>
+              <!-- <li class="list-group-item"><img src="img/maps-and-flags.png" alt="">{{area.address}}</li> -->
+
+              <li class="list-group-item"><img src="img/phone.png" alt="">{{area.tel}}</li>
+           </ul>
+        </div>
+    </div>
+
+      </script>
+  <script>
+    Vue.component('card', {
+      props: ['area'],
+      template: '#area',
+
+    })
+
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        data,
+        Place: [],
+        filter: '',
+        totalPage: '',
+        currentPage: 0,
+      },
+
+      methods: {
+        GetList() {
+          let vm = this;
+          let Temp = vm.data.map(function (item) {
+            return item.district //回傳每個item的date並重組成一個新陣列
+
+          })
+          vm.Place = Temp.filter((item, index, arr) => {
+            return arr.indexOf(item) === index;
+          })
+        },
+      },
+      computed: {
+
+        filterData: function () {
+          const vm = this;
+          let items = [];
+          if (vm.filter != '') {
+            items = vm.data.filter(function (item) {
+              return item.district === vm.filter
+            }
+            )
+          }
+          console.log(items);
+          let NewData = [];
+          items.forEach((item, index) => {
+            if (index % 10 === 0) {
+              NewData.push([]);
+            }
+            const page = parseInt(index / 10);
+            NewData[page].push(item);
+          })
+          console.log(NewData);
+          vm.totalPage = NewData.length
+          return NewData
+
+        },
+
+      },
+      created() {
+        this.GetList();
+      },
+    })
+  </script>
+
+
+</body>
+
+</html>
