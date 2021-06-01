@@ -22,10 +22,7 @@ background-repeat: repeat;
 background-position: center center;
 
 }
-.header h1{
-  background-color: #000;
-  color: aliceblue;
-}
+
 .top{
     width: 80px;
     height: 80px;
@@ -52,8 +49,8 @@ background-position: center center;
 
 <body>
   <div id="app">
-    <header class="header">
-    <h1 class="text-center p-3">台南景點一覽</h1>
+    <header class="">
+    <h1 class="text-center p-2 text-warning fw-bolder   ">台南景點一覽</h1>
   </header>
     <div class="container">
       <div class="row justify-content-center">
@@ -103,7 +100,7 @@ background-position: center center;
              </div>
              <ul class="list-group list-group-flush">
               <li class="list-group-item"><img src="img/clock.png" alt=""> {{area.open_time}}</li>
-              <li class="list-group-item"><a :href="`http://maps.apple.com/maps?q=${area.address}`" class='link-info'><img src="img/maps-and-flags.png" alt="">{{area.address}}</a></li>
+              <li class="list-group-item"><a :href="`http://maps.apple.com/maps?q=${area.address}`" target="_blank" class='link-info'><img src="img/maps-and-flags.png" alt="">{{area.address}}</a></li>
               <!-- <li class="list-group-item"><img src="img/maps-and-flags.png" alt="">{{area.address}}</li> -->
 
               <li class="list-group-item"><img src="img/phone.png" alt="">{{area.tel}}</li>
