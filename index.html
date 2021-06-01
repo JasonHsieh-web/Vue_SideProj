@@ -16,16 +16,45 @@
       width: 35% !important;
     }
 
-    /* body {
+    body {
 background-image: url('img/TaiwanView.jpg');
-background-repeat: repeat-x;
-} */
+background-repeat: repeat;
+background-position: center center;
+
+}
+.header h1{
+  background-color: #000;
+  color: aliceblue;
+}
+.top{
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+
+}
+.top a{
+   text-decoration: none;
+   color: #fff;
+}
+.top .fas{
+  color: #fff;
+    font-size: 50px;
+}
   </style>
 </head>
 
 <body>
   <div id="app">
+    <header class="header">
     <h1 class="text-center p-3">台南景點一覽</h1>
+  </header>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-6">
@@ -57,6 +86,9 @@ background-repeat: repeat-x;
       </div>
     </div>
 
+    <div class="top" >
+    <a href="#" @click.prevent="GoTop" ><i class="fas fa-arrow-circle-up"></i></a>
+    </div>
   </div>
 
 
@@ -80,6 +112,7 @@ background-repeat: repeat-x;
     </div>
 
       </script>
+     
   <script>
     Vue.component('card', {
       props: ['area'],
@@ -97,7 +130,10 @@ background-repeat: repeat-x;
         totalPage: '',
         currentPage: 0,
       },
-
+      mounted () {
+  window.addEventListener('scroll', this.CalHeight);
+  $(".top").hide();
+},
       methods: {
         GetList() {
           let vm = this;
@@ -109,7 +145,20 @@ background-repeat: repeat-x;
             return arr.indexOf(item) === index;
           })
         },
+        CalHeight(){
+         
+        let last=$("body").height()-$(window).height()-100;
+          console.log($(window).scrollTop());
+         if($(window).scrollTop()>=last){$(".top").show(1000);}
+         else{$(".top").hide(1000);}
+    
       },
+      GoTop(){
+        $('html,body').animate({
+            scrollTop:0
+        },300);
+      }
+    },
       computed: {
 
         filterData: function () {
@@ -121,7 +170,6 @@ background-repeat: repeat-x;
             }
             )
           }
-          console.log(items);
           let NewData = [];
           items.forEach((item, index) => {
             if (index % 10 === 0) {
@@ -130,7 +178,6 @@ background-repeat: repeat-x;
             const page = parseInt(index / 10);
             NewData[page].push(item);
           })
-          console.log(NewData);
           vm.totalPage = NewData.length
           return NewData
 
