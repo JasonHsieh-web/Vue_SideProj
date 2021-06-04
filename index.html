@@ -74,7 +74,7 @@ background-position: center center;
 
             <li class="page-item" v-for="(page,index) in totalPage" :key="index"
               :class="{active:currentPage === page - 1}">
-              <a class="page-link" @click.prevent="currentPage = page -1" href="#">{{page}}</a>
+              <a class="page-link" @click.prevent="currentPage = page -1" href="#">{{page }}</a>
             </li>
 
 
